@@ -1,0 +1,121 @@
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+
+namespace ConsoleSteps.ModelState.ConcreteStates
+{
+    public class CreateMatrixes : AbstractState
+    {
+        private string _projectDirectory;
+        private string _pathToSerializedObjects;
+
+        private int amountOfPixels = (64 * 64 * 3);
+
+        public CreateMatrixes()
+        {
+            _projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+            _pathToSerializedObjects = Path.Combine(_projectDirectory, @"SerializedObjects\");
+            //_pathToXtrain = Path.Combine(_pathToSerializedObjects, @"x_train");
+        }
+        public override void Resolve()
+        {
+
+            Console.WriteLine($"CreateMatrixes begin");
+
+            //TODO: implement CheckIfProcessingIsNeeded() see if all matrixes exist before going.
+
+            //var x_train = CreateXTrain();
+            //SerealizeMatrix(x_train, "x_train");
+            var trainMatrixes = CreateXAndYMatrixes(@"ProcessedImages\Training\");
+            var testMatrixes = CreateXAndYMatrixes(@"ProcessedImages\Test\");
+
+            SerealizeMatrix(trainMatrixes[0], "x_train");
+            SerealizeMatrix(trainMatrixes[1], "y_train");
+            SerealizeMatrix(testMatrixes[0], "x_test");
+            SerealizeMatrix(testMatrixes[1], "y_test");
+
+
+            Console.WriteLine($"CreateMatrixes end");
+        }
+
+        private void SerealizeMatrix(object matrix, string matrixName)
+        {
+            using (StreamWriter sw = new StreamWriter(_pathToSerializedObjects + "\\" + matrixName + ".json"))
+            using (JsonWriter writer = new JsonTextWriter(sw))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(writer, matrix);
+            }
+        }
+
+
+        //Some matrixes could be integers others may be floats.
+        private T DeserealizeMatrix<T>(string matrixName)
+        {
+            using (StreamReader file = File.OpenText(_pathToSerializedObjects + "\\" + matrixName))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                return (T)serializer.Deserialize(file, typeof(T));
+            }
+        }
+
+        private List<float[,]> CreateXAndYMatrixes(string environmentPath)
+        {
+            List<float[,]> returnList = new List<float[,]>();
+            var _pathToImagesProcessedTraining = Path.Combine(_projectDirectory, environmentPath);
+
+            // Project highlight: idk about performance, but code works!. It sorts the files 0,1,2,..,199 .
+            var imagesNameList = Directory.GetFiles(_pathToImagesProcessedTraining, "*.*", SearchOption.AllDirectories).OrderBy(name => Convert.ToInt32(Path.GetFileNameWithoutExtension(name))).ToList();
+
+            var x_maxtrix = new float[amountOfPixels, imagesNameList.Count];
+            var y_maxtrix = new float[1, imagesNameList.Count];
+
+            for (int z = 0; z < imagesNameList.Count; z++)
+            {
+                var count = 0;
+                using (var img = new Bitmap(imagesNameList[z]))
+                {
+                    for (int i = 0; i < img.Width; i++)
+                    {
+                        for (int j = 0; j < img.Height; j++)
+                        {
+                            Color pixel = img.GetPixel(i, j);
+                            x_maxtrix[count, z] = pixel.R;
+                            count++;
+                            x_maxtrix[count, z] = pixel.G;
+                            count++;
+                            x_maxtrix[count, z] = pixel.B;
+                            count++;
+                        }
+
+                    }
+                }
+            }
+
+            returnList.Add(x_maxtrix);
+            returnList.Add(y_maxtrix);
+            return returnList;
+
+        }
+
+        //If we have 4 serialized matrixes, we don't need to reprocess all images.
+        private bool CheckIfProcessingIsNeeded() {
+
+            var matrixesFiles = Directory.GetFiles(_pathToSerializedObjects, "*.*", SearchOption.AllDirectories).ToList();
+
+            if (matrixesFiles.Count == 4)
+            {
+                return false;
+            }
+            else {
+                return true;
+            }
+
+        }
+
+    }
+}
