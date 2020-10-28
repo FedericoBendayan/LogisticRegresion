@@ -33,10 +33,18 @@ namespace ConsoleSteps.ModelState.ConcreteStates
             var trainMatrixes = CreateXAndYMatrixes(@"ProcessedImages\Training\");
             var testMatrixes = CreateXAndYMatrixes(@"ProcessedImages\Test\");
 
-            SerealizeMatrix(trainMatrixes[0], "x_train");
-            SerealizeMatrix(trainMatrixes[1], "y_train");
-            SerealizeMatrix(testMatrixes[0], "x_test");
-            SerealizeMatrix(testMatrixes[1], "y_test");
+            if (CheckIfProcessingIsNeeded())
+            {
+                SerealizeMatrix(trainMatrixes[0], "x_train");
+                SerealizeMatrix(trainMatrixes[1], "y_train");
+                SerealizeMatrix(testMatrixes[0], "x_test");
+                SerealizeMatrix(testMatrixes[1], "y_test");
+
+                Console.WriteLine($"We created the four matrixes");
+            }
+            else {
+                Console.WriteLine($"We don't need to create matrixes");
+            }
 
 
             Console.WriteLine($"CreateMatrixes end");
@@ -103,7 +111,8 @@ namespace ConsoleSteps.ModelState.ConcreteStates
         }
 
         //If we have 4 serialized matrixes, we don't need to reprocess all images.
-        private bool CheckIfProcessingIsNeeded() {
+        private bool CheckIfProcessingIsNeeded()
+        {
 
             var matrixesFiles = Directory.GetFiles(_pathToSerializedObjects, "*.*", SearchOption.AllDirectories).ToList();
 
@@ -111,7 +120,8 @@ namespace ConsoleSteps.ModelState.ConcreteStates
             {
                 return false;
             }
-            else {
+            else
+            {
                 return true;
             }
 

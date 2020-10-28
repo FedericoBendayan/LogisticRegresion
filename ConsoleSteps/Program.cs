@@ -1,5 +1,6 @@
 ﻿using ConsoleSteps.ModelState;
 using ConsoleSteps.ModelState.ConcreteStates;
+using ConsoleSteps.Tools;
 using System;
 
 namespace ConsoleSteps
@@ -33,7 +34,7 @@ namespace ConsoleSteps
             //string pathToImagesTest = Path.Combine(projectDirectory, @"ProcessedImages\Test\");
 
             //Uncoment for a new batch processing 
-            //FileMoverAndSeparator.RenameSecuentallyAllFIlesInFolder();
+            FileMoverAndSeparator.RenameSecuentallyAllFIlesInFolder();
 
             var context = new Context(new LoadImages());
 

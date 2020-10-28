@@ -42,11 +42,11 @@ namespace ConsoleSteps.Tools
             {
                 if (i < testLength)
                 {
-                    File.Move(testFiles[i].FullName, Path.Combine(pathToImagesTest,  testCount.ToString() + ".jpeg"));
+                    File.Move(testFiles[i].FullName, Path.Combine(pathToImagesTest, System.Guid.NewGuid().ToString() + ".jpeg"));
                     testCount++;
                 }
                 else {
-                    File.Move(testFiles[i].FullName, Path.Combine(pathToImagesTraining, trainingCount.ToString() + ".jpeg"));
+                    File.Move(testFiles[i].FullName, Path.Combine(pathToImagesTraining, System.Guid.NewGuid().ToString() + ".jpeg"));
                     trainingCount++;
                 }
                 
@@ -57,12 +57,12 @@ namespace ConsoleSteps.Tools
             {
                 if (i < trainingLength)
                 {
-                    File.Move(trainingFiles[i].FullName, Path.Combine(pathToImagesTest,  testCount.ToString() + ".jpeg"));
+                    File.Move(trainingFiles[i].FullName, Path.Combine(pathToImagesTest, System.Guid.NewGuid().ToString() + ".jpeg"));
                     testCount++;
                 }
                 else
                 {
-                    File.Move(trainingFiles[i].FullName, Path.Combine(pathToImagesTraining, trainingCount.ToString() + ".jpeg"));
+                    File.Move(trainingFiles[i].FullName, Path.Combine(pathToImagesTraining, System.Guid.NewGuid().ToString() + ".jpeg"));
                     trainingCount++;
                 }
 

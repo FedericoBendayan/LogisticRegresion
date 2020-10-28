@@ -65,7 +65,7 @@ namespace ConsoleSteps.ModelState.ConcreteStates
                 {
                     var newImage = ImageResizer.ResizeImage(image, 64, 64);
                     var fileName = Path.GetFileNameWithoutExtension(imagesNameList[i]);
-                    var newPath = Path.Combine(desinationPath, fileName + ".bmp");
+                    var newPath = Path.Combine(desinationPath, i.ToString() + ".bmp");
                     newImage.Save(newPath, ImageFormat.Bmp);
                 }
             }
