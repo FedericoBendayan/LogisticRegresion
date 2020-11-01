@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogisticRegresion", "LogisticRegresion\LogisticRegresion.csproj", "{9A92CE6E-2C95-4742-94C9-7BEB966262D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogisticRegresion", "LogisticRegresion\LogisticRegresion.csproj", "{9A92CE6E-2C95-4742-94C9-7BEB966262D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleSteps", "ConsoleSteps\ConsoleSteps.csproj", "{6EB3EF72-93E4-42F3-B663-07F1CD32DC84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleSteps", "ConsoleSteps\ConsoleSteps.csproj", "{6EB3EF72-93E4-42F3-B663-07F1CD32DC84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitLogisticRegresion", "NUnitLogisticRegresion\NUnitLogisticRegresion.csproj", "{DD8B20C5-14DA-4209-BB6A-A355E91DBFC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{6EB3EF72-93E4-42F3-B663-07F1CD32DC84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EB3EF72-93E4-42F3-B663-07F1CD32DC84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EB3EF72-93E4-42F3-B663-07F1CD32DC84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD8B20C5-14DA-4209-BB6A-A355E91DBFC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD8B20C5-14DA-4209-BB6A-A355E91DBFC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD8B20C5-14DA-4209-BB6A-A355E91DBFC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD8B20C5-14DA-4209-BB6A-A355E91DBFC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

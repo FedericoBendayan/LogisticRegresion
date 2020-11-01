@@ -8,6 +8,8 @@ using System.Text;
 
 namespace ConsoleSteps.ModelState.ConcreteStates
 {
+    //This class does not handle the step of filling y_train and y_test
+    //I should think a better way of doing it.
     public class CreateMatrixes : AbstractState
     {
         private string _projectDirectory;
@@ -91,12 +93,13 @@ namespace ConsoleSteps.ModelState.ConcreteStates
                     {
                         for (int j = 0; j < img.Height; j++)
                         {
+                            //We divide by 255 to notmalize the data.
                             Color pixel = img.GetPixel(i, j);
-                            x_maxtrix[count, z] = pixel.R;
+                            x_maxtrix[count, z] = (float) pixel.R / 255;
                             count++;
-                            x_maxtrix[count, z] = pixel.G;
+                            x_maxtrix[count, z] = (float) pixel.G / 255;
                             count++;
-                            x_maxtrix[count, z] = pixel.B;
+                            x_maxtrix[count, z] = (float) pixel.B / 255;
                             count++;
                         }
 

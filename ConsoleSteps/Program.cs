@@ -34,10 +34,14 @@ namespace ConsoleSteps
             //string pathToImagesTest = Path.Combine(projectDirectory, @"ProcessedImages\Test\");
 
             //Uncoment for a new batch processing 
-            FileMoverAndSeparator.RenameSecuentallyAllFIlesInFolder();
+            //FileMoverAndSeparator.RenameSecuentallyAllFIlesInFolder();
+
+            //TODO: replace this awfull method for a better approach.
+            // This (awfull) method will fill the Y test and train matrixes load by hand (omg)
+            //ManualYMatrixHelper.Resolve();
+
 
             var context = new Context(new LoadImages());
-
             context.ResolveModelState();
 
             Console.WriteLine("Done");
