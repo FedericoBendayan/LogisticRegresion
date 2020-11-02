@@ -47,5 +47,21 @@ namespace NUnitLogisticRegresion
             Assert.AreEqual(transponseOutput, xT);
         }
 
+        [Test]
+        public void ToSingleBasic()
+        {
+            double[,] testArray = new double[4, 3]
+                                {
+                                    {  1,  2,  3 },
+                                    {  4,  5,  6 },
+                                    {  7,  8,  9 },
+                                    { 10, 11, 12 }
+                                };
+
+            var toSingleOutput = MLMath.ToSingle(testArray);
+
+            Assert.AreEqual(toSingleOutput, new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 });
+        }
+
     }
 }
