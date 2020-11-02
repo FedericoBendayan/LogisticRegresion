@@ -24,15 +24,15 @@ namespace NUnitLogisticRegresion
 
             //Truncate for proper assertion
             sigmoidOutput.Cost = TruncateDecimals(sigmoidOutput.Cost, 15);
-            sigmoidOutput.Grads.dw[0] = TruncateDecimals(sigmoidOutput.Grads.dw[0], 9);
-            sigmoidOutput.Grads.dw[1] = TruncateDecimals(sigmoidOutput.Grads.dw[1], 9);
-            sigmoidOutput.Grads.db = TruncateDecimals(sigmoidOutput.Grads.db, 15);
+            sigmoidOutput.Grads.dw[0] = TruncateDecimals(sigmoidOutput.Grads.dw[0], 8);
+            sigmoidOutput.Grads.dw[1] = TruncateDecimals(sigmoidOutput.Grads.dw[1], 6);
+            sigmoidOutput.Grads.db = TruncateDecimals(sigmoidOutput.Grads.db, 14);
 
 
             Assert.AreEqual(sigmoidOutput.Cost, 5.801545319394553);
 
             Assert.AreEqual(sigmoidOutput.Grads.dw[0], 0.99845601);
-            Assert.AreEqual(sigmoidOutput.Grads.dw[1], 2.39507239);
+            Assert.AreEqual(sigmoidOutput.Grads.dw[1], 2.395072);
 
             Assert.AreEqual(sigmoidOutput.Grads.db, 0.00145557813678);
         }
