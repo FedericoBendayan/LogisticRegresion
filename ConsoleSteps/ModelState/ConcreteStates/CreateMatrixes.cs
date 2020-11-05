@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ConsoleSteps.Tools;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -38,9 +39,11 @@ namespace ConsoleSteps.ModelState.ConcreteStates
             if (CheckIfProcessingIsNeeded())
             {
                 SerealizeMatrix(trainMatrixes[0], "x_train");
-                SerealizeMatrix(trainMatrixes[1], "y_train");
+                //TODO create Y matrix as single array, not matrix
+                SerealizeMatrix(MLMath.ToSingle(trainMatrixes[1]), "y_train");
                 SerealizeMatrix(testMatrixes[0], "x_test");
-                SerealizeMatrix(testMatrixes[1], "y_test");
+                //TODO create Y matrix as single array, not matrix
+                SerealizeMatrix(MLMath.ToSingle(testMatrixes[1]), "y_test");
 
                 Console.WriteLine($"We created the four matrixes");
             }
@@ -50,6 +53,8 @@ namespace ConsoleSteps.ModelState.ConcreteStates
 
 
             Console.WriteLine($"CreateMatrixes end");
+            this._context.TransitionTo(new TrainModel());
+            this._context.ResolveModelState();
         }
 
         private void SerealizeMatrix(object matrix, string matrixName)
@@ -63,7 +68,7 @@ namespace ConsoleSteps.ModelState.ConcreteStates
         }
 
 
-        //Some matrixes could be integers others may be floats.
+        //Some matrixes could be integers others may be doubles.
         private T DeserealizeMatrix<T>(string matrixName)
         {
             using (StreamReader file = File.OpenText(_pathToSerializedObjects + "\\" + matrixName))
@@ -73,16 +78,16 @@ namespace ConsoleSteps.ModelState.ConcreteStates
             }
         }
 
-        private List<float[,]> CreateXAndYMatrixes(string environmentPath)
+        private List<double[,]> CreateXAndYMatrixes(string environmentPath)
         {
-            List<float[,]> returnList = new List<float[,]>();
+            List<double[,]> returnList = new List<double[,]>();
             var _pathToImagesProcessedTraining = Path.Combine(_projectDirectory, environmentPath);
 
             // Project highlight: idk about performance, but code works!. It sorts the files 0,1,2,..,199 .
             var imagesNameList = Directory.GetFiles(_pathToImagesProcessedTraining, "*.*", SearchOption.AllDirectories).OrderBy(name => Convert.ToInt32(Path.GetFileNameWithoutExtension(name))).ToList();
 
-            var x_maxtrix = new float[amountOfPixels, imagesNameList.Count];
-            var y_maxtrix = new float[1, imagesNameList.Count];
+            var x_maxtrix = new double[amountOfPixels, imagesNameList.Count];
+            var y_maxtrix = new double[1, imagesNameList.Count];
 
             for (int z = 0; z < imagesNameList.Count; z++)
             {
@@ -95,11 +100,11 @@ namespace ConsoleSteps.ModelState.ConcreteStates
                         {
                             //We divide by 255 to notmalize the data.
                             Color pixel = img.GetPixel(i, j);
-                            x_maxtrix[count, z] = (float) pixel.R / 255;
+                            x_maxtrix[count, z] = (double) pixel.R / 255;
                             count++;
-                            x_maxtrix[count, z] = (float) pixel.G / 255;
+                            x_maxtrix[count, z] = (double) pixel.G / 255;
                             count++;
-                            x_maxtrix[count, z] = (float) pixel.B / 255;
+                            x_maxtrix[count, z] = (double) pixel.B / 255;
                             count++;
                         }
 
