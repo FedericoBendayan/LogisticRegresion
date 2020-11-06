@@ -45,7 +45,7 @@ namespace ConsoleSteps
             context.ResolveModelState();
 
             Console.WriteLine("###############");
-            Console.WriteLine("ENDING PROGRAMM");
+            Console.WriteLine("ENDING PROGRAM");
             Console.WriteLine("###############");
             Console.ReadKey();
             Environment.Exit(0);
