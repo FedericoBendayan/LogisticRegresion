@@ -41,10 +41,12 @@ namespace ConsoleSteps
             //ManualYMatrixHelper.Resolve();
 
 
-            var context = new Context(new LoadImages());
+            var context = new Context(new ImageSortAndYMatrixCreator());
             context.ResolveModelState();
 
-            Console.WriteLine("Done");
+            Console.WriteLine("###############");
+            Console.WriteLine("ENDING PROGRAMM");
+            Console.WriteLine("###############");
             Console.ReadKey();
             Environment.Exit(0);
 

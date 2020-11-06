@@ -362,7 +362,7 @@ MigrationBackup/
 FodyWeavers.xsd
 
 #Project custom folder
-ConsoleSteps/Images/
-ConsoleSteps/Images - Copy/
-ConsoleSteps/ProcessedImages
-ConsoleSteps/SerializedObjects
+**ConsoleSteps/Images/
+**ConsoleSteps/Images - Copy/
+**ConsoleSteps/ProcessedImages
+**ConsoleSteps/SerializedObjects

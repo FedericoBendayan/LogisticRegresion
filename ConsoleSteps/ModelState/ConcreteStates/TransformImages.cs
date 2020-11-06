@@ -11,7 +11,7 @@ namespace ConsoleSteps.ModelState.ConcreteStates
 {
     // Concrete States implement various behaviors, associated with a state of
     // the Context.
-    public class LoadImages : AbstractState
+    public class TransformImages : AbstractState
     {
         private string _projectDirectory;
         private string _pathToImagesTraining;
@@ -20,7 +20,7 @@ namespace ConsoleSteps.ModelState.ConcreteStates
         private string _pathToImagesProcessedTest;
 
 
-        public LoadImages()
+        public TransformImages()
         {
             _projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
             _pathToImagesTraining = Path.Combine(_projectDirectory, @"Images\Training\");
@@ -32,7 +32,8 @@ namespace ConsoleSteps.ModelState.ConcreteStates
         }
         public override void Resolve()
         {
-            Console.WriteLine($"LoadImages begin");
+            Console.WriteLine();
+            Console.WriteLine($"STEP 2 BEGIN: TransformImages ");
 
             if (CheckIfProcessingIsNeeded())
             {
@@ -47,8 +48,10 @@ namespace ConsoleSteps.ModelState.ConcreteStates
 
 
 
-            
-            Console.WriteLine($"LoadImages end");
+
+            Console.WriteLine();
+            Console.WriteLine($"STEP 2 END: TransformImages ");
+
             this._context.TransitionTo(new CreateMatrixes());
             this._context.ResolveModelState();
 

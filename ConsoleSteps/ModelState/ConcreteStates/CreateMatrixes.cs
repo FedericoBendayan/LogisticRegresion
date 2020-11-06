@@ -27,23 +27,16 @@ namespace ConsoleSteps.ModelState.ConcreteStates
         public override void Resolve()
         {
 
-            Console.WriteLine($"CreateMatrixes begin");
-
-            //TODO: implement CheckIfProcessingIsNeeded() see if all matrixes exist before going.
-
-            //var x_train = CreateXTrain();
-            //SerealizeMatrix(x_train, "x_train");
-            var trainMatrixes = CreateXAndYMatrixes(@"ProcessedImages\Training\");
-            var testMatrixes = CreateXAndYMatrixes(@"ProcessedImages\Test\");
+            Console.WriteLine();
+            Console.WriteLine($"STEP 3 BEGIN: CreateMatrixes ");
 
             if (CheckIfProcessingIsNeeded())
             {
-                SerealizeMatrix(trainMatrixes[0], "x_train");
-                //TODO create Y matrix as single array, not matrix
-                SerealizeMatrix(MLMath.ToSingle(trainMatrixes[1]), "y_train");
-                SerealizeMatrix(testMatrixes[0], "x_test");
-                //TODO create Y matrix as single array, not matrix
-                SerealizeMatrix(MLMath.ToSingle(testMatrixes[1]), "y_test");
+                var x_train = CreateXMatrix(@"ProcessedImages\Training\");
+                var x_test = CreateXMatrix(@"ProcessedImages\Test\");
+
+                SerealizeMatrix(x_train, "x_train");
+                SerealizeMatrix(x_test, "x_test");
 
                 Console.WriteLine($"We created the four matrixes");
             }
@@ -52,7 +45,9 @@ namespace ConsoleSteps.ModelState.ConcreteStates
             }
 
 
-            Console.WriteLine($"CreateMatrixes end");
+            Console.WriteLine();
+            Console.WriteLine($"STEP 3 END: CreateMatrixes ");
+
             this._context.TransitionTo(new TrainModel());
             this._context.ResolveModelState();
         }
@@ -78,7 +73,7 @@ namespace ConsoleSteps.ModelState.ConcreteStates
             }
         }
 
-        private List<double[,]> CreateXAndYMatrixes(string environmentPath)
+        private double[,] CreateXMatrix(string environmentPath)
         {
             List<double[,]> returnList = new List<double[,]>();
             var _pathToImagesProcessedTraining = Path.Combine(_projectDirectory, environmentPath);
@@ -87,7 +82,6 @@ namespace ConsoleSteps.ModelState.ConcreteStates
             var imagesNameList = Directory.GetFiles(_pathToImagesProcessedTraining, "*.*", SearchOption.AllDirectories).OrderBy(name => Convert.ToInt32(Path.GetFileNameWithoutExtension(name))).ToList();
 
             var x_maxtrix = new double[amountOfPixels, imagesNameList.Count];
-            var y_maxtrix = new double[1, imagesNameList.Count];
 
             for (int z = 0; z < imagesNameList.Count; z++)
             {
@@ -112,9 +106,7 @@ namespace ConsoleSteps.ModelState.ConcreteStates
                 }
             }
 
-            returnList.Add(x_maxtrix);
-            returnList.Add(y_maxtrix);
-            return returnList;
+            return x_maxtrix;
 
         }
 

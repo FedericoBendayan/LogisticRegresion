@@ -14,8 +14,6 @@ namespace ConsoleSteps.ModelState.ConcreteStates
         private string _projectDirectory;
         private string _pathToSerializedObjects;
 
-        private int amountOfPixels = (64 * 64 * 3);
-
         public TrainModel()
         {
             _projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
@@ -25,6 +23,9 @@ namespace ConsoleSteps.ModelState.ConcreteStates
         {
             var matrixesFiles = Directory.GetFiles(_pathToSerializedObjects, "*.*", SearchOption.AllDirectories).ToList();
 
+            Console.WriteLine();
+            Console.WriteLine($"STEP 4 BEGIN: TrainModel ");
+            //TODO move logic to "CheckIfprocessIsNeeded method, like the other states
             if (matrixesFiles.Count == 4)
             {
                 Console.WriteLine("We can process");
@@ -46,6 +47,8 @@ namespace ConsoleSteps.ModelState.ConcreteStates
                 Console.WriteLine("We can't process");
 
             }
+            Console.WriteLine();
+            Console.WriteLine($"STEP 4 END: TrainModel ");
         }
 
         //Some matrixes could be integers others may be floats.

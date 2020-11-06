@@ -268,10 +268,10 @@ namespace ConsoleSteps.Tools
         {
             var costList = new List<double>();
             var optimizeOutput = new OptimizeOutput();
-
+            var propagateOutput = new PropagateOutput();
             for (int i = 0; i < num_iterations; i++)
             {
-                var propagateOutput = Propagate(w, b, X, Y);
+                 propagateOutput = Propagate(w, b, X, Y);
 
                 //Update weights
                 // w = w -  learning_rate * dw
@@ -289,14 +289,10 @@ namespace ConsoleSteps.Tools
                     }
                 }
 
-
-
-                optimizeOutput.Costs = costList.ToArray();
-                optimizeOutput.Grads = propagateOutput.Grads;
-                optimizeOutput.Params = new Params(w, b);
-
-
             }
+            optimizeOutput.Costs = costList.ToArray();
+            optimizeOutput.Grads = propagateOutput.Grads;
+            optimizeOutput.Params = new Params(w, b);
             return optimizeOutput;
         }
 
@@ -330,7 +326,9 @@ namespace ConsoleSteps.Tools
                 {
                     Y_prediction[0, i] = 1;
                 }
-                //I'm not gonna do "else  Y_prediction[0, i] = 0;" because array values are zero by default.
+                else {
+                    Y_prediction[0, i] = 0;
+                }
             }
             return Y_prediction;
         }
@@ -358,10 +356,10 @@ namespace ConsoleSteps.Tools
             double[,] X_test,
             double[] Y_test,
             int num_iterations = 2000,
-            double learning_rate = 0.005,
+            double learning_rate = 0.00005,
             bool print_cost = true)
         {
-            var w = new double[(64 * 64 * 3)];
+            var w = createWMatrixRandom(64 * 64 * 3);
             double b = 0;
 
             var optimizeOutput = Optimize(w, b, X_train, Y_train, num_iterations, learning_rate);
@@ -382,16 +380,25 @@ namespace ConsoleSteps.Tools
             modelOutput.learning_rate = learning_rate;
             modelOutput.num_iterations = num_iterations;
 
-            modelOutput.test_accuarcy = MeanAbsolutePercentage(ToSingle(Y_prediction_test), Y_test);
-            modelOutput.train_accuarcy = MeanAbsolutePercentage(ToSingle(Y_prediction_train), Y_train);
+            modelOutput.test_accuracy = 100-MeanAbsolutePercentage(ToSingle(Y_prediction_test), Y_test);
+            modelOutput.train_accuracy = 100-MeanAbsolutePercentage(ToSingle(Y_prediction_train), Y_train);
 
             // Print train/test Errors
-            Console.WriteLine($"train accuracy: {modelOutput.train_accuarcy} %");
-            Console.WriteLine($"test accuracy: {modelOutput.test_accuarcy} %");
+            Console.WriteLine($"train accuracy: {modelOutput.train_accuracy} %");
+            Console.WriteLine($"test accuracy: {modelOutput.test_accuracy} %");
 
             return modelOutput;
         }
+        private static double[] createWMatrixRandom(int length) {
 
+            var w = new double[length];
+            var rnd = new Random();
+            for (int i = 0; i < length; i++)
+            {
+                w[i] = rnd.NextDouble();
+            }
+            return w;
+        }
         public static double MeanAbsolutePercentage(double[] x, double[] y)
         {
             double output = 0;
@@ -419,8 +426,8 @@ namespace ConsoleSteps.Tools
         public double[] w { get; set; }
         public double b { get; set; }
         public double learning_rate { get; set; }
-        public double train_accuarcy { get; set; }
-        public double test_accuarcy { get; set; }
+        public double train_accuracy { get; set; }
+        public double test_accuracy { get; set; }
         public int num_iterations { get; set; }
 
     }
