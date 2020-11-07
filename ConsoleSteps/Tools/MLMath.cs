@@ -356,7 +356,7 @@ namespace ConsoleSteps.Tools
             double[,] X_test,
             double[] Y_test,
             int num_iterations = 3000,
-            double learning_rate = 0.005,
+            double learning_rate = 0.0001,
             bool print_cost = true)
         {
             var w = createWMatrixRandom(64 * 64 * 3);
