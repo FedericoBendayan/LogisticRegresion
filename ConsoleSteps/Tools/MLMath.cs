@@ -25,7 +25,7 @@ namespace ConsoleSteps.Tools
         /// <param name="x">A float precision number representing the x axis.</param>
         public static double Sigmoid(double x)
         {
-            var sigmoid = 1 / (1 + ((Math.Exp(x * (-1)))));
+            var sigmoid = 1 / (1 + Math.Exp(x * (-1)));
             return sigmoid;
         }
 
@@ -55,7 +55,7 @@ namespace ConsoleSteps.Tools
             for (int i = 0; i < m; i++)
             {
                 double[] slice = SliceColumn(X, i).ToArray();
-                A[0, i] = Sigmoid((Dot(slice, w) + b));
+                A[0, i] = Sigmoid((Dot(slice, w) + b)/m);
             }
 
             // A to list:[[0.9998766054240137, 0.9999938558253978, 0.004496273160941178]]
@@ -355,14 +355,14 @@ namespace ConsoleSteps.Tools
             double[] Y_train,
             double[,] X_test,
             double[] Y_test,
-            int num_iterations = 3000,
-            double learning_rate = 0.0001,
+            int num_iterations = 400,
+            double learning_rate = 0.05,
             bool print_cost = true)
         {
             var w = createWMatrixRandom(64 * 64 * 3);
             double b = 0;
 
-            var optimizeOutput = Optimize(w, b, X_train, Y_train, num_iterations, learning_rate);
+            var optimizeOutput = Optimize(w, b, X_train, Y_train, num_iterations, learning_rate, print_cost);
 
             w = optimizeOutput.Params.w;
             b = optimizeOutput.Params.b;
@@ -395,7 +395,7 @@ namespace ConsoleSteps.Tools
             var rnd = new Random();
             for (int i = 0; i < length; i++)
             {
-                w[i] = rnd.NextDouble();
+                w[i] = rnd.NextDouble() * (2)  - 1;
             }
             return w;
         }

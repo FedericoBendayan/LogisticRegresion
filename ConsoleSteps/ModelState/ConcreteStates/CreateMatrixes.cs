@@ -95,19 +95,19 @@ namespace ConsoleSteps.ModelState.ConcreteStates
                             //We divide by 255 to notmalize the data.
                             Color pixel = img.GetPixel(i, j);
                             //TODO remove if not neded: We won't normalize for testing
-                            //x_maxtrix[count, z] = (double) pixel.R / 255;
-                            //count++;
-                            //x_maxtrix[count, z] = (double) pixel.G / 255;
-                            //count++;
-                            //x_maxtrix[count, z] = (double) pixel.B / 255;
-                            //count++;
+                            x_maxtrix[count, z] = (double)pixel.R / 255;
+                            count++;
+                            x_maxtrix[count, z] = (double)pixel.G / 255;
+                            count++;
+                            x_maxtrix[count, z] = (double)pixel.B / 255;
+                            count++;
 
-                            x_maxtrix[count, z] = (double)pixel.R;
-                            count++;
-                            x_maxtrix[count, z] = (double)pixel.G;
-                            count++;
-                            x_maxtrix[count, z] = (double)pixel.B;
-                            count++;
+                            //x_maxtrix[count, z] = (double)pixel.R;
+                            //count++;
+                            //x_maxtrix[count, z] = (double)pixel.G;
+                            //count++;
+                            //x_maxtrix[count, z] = (double)pixel.B;
+                            //count++;
                         }
 
                     }
