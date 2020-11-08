@@ -285,6 +285,14 @@ namespace ConsoleSteps.Tools
                     costList.Add(propagateOutput.Cost);
                     if (print_cost)
                     {
+                        //var Y_prediction_test = Predict(w, b, X_test);
+                        //var Y_prediction_train = Predict(w, b, X_train);
+                        //var test_accuracy = 100 - MeanAbsolutePercentage(ToSingle(Y_prediction_test), Y_test);
+                        //var train_accuracy = 100 - MeanAbsolutePercentage(ToSingle(Y_prediction_train), Y_train);
+
+                        // Print train/test Errors
+                        //Console.WriteLine($"train accuracy: {train_accuracy} %");
+                        //Console.WriteLine($"test accuracy: {test_accuracy} %");
                         Console.WriteLine($"Cost after iteration {i}: {propagateOutput.Cost}");
                     }
                 }
@@ -355,7 +363,7 @@ namespace ConsoleSteps.Tools
             double[] Y_train,
             double[,] X_test,
             double[] Y_test,
-            int num_iterations = 4000,
+            int num_iterations = 16000,
             double learning_rate = 1.5,
             bool print_cost = true)
         {
