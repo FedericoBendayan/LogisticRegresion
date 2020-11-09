@@ -13,6 +13,7 @@
   <ItemGroup>
     <Folder Include="Images\Test\" />
     <Folder Include="Images\Training\" />
+    <Folder Include="SerializedModels\cats vs dogs models\" />
     <Folder Include="SerializedObjects\" />
     <Folder Include="ProcessedImages\Test\" />
     <Folder Include="ProcessedImages\Training\" />

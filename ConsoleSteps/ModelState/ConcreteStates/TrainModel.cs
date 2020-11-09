@@ -37,7 +37,7 @@ namespace ConsoleSteps.ModelState.ConcreteStates
                 var modelOutput = MLMath.Model(x_train, y_train, x_test, y_test);
 
                 Console.WriteLine("Done with the model");
-                SerealizeMatrix(modelOutput, "modelOutput");
+                JsonSerealize(modelOutput, "modelOutput",Formatting.Indented);
 
 
             }
@@ -61,12 +61,13 @@ namespace ConsoleSteps.ModelState.ConcreteStates
             }
         }
 
-        private void SerealizeMatrix(object matrix, string matrixName)
+        private void JsonSerealize(object matrix, string matrixName, Formatting formatting = Formatting.None)
         {
             using (StreamWriter sw = new StreamWriter(_pathToSerializedObjects + "\\" + matrixName + ".json"))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
                 JsonSerializer serializer = new JsonSerializer();
+                serializer.Formatting = formatting;
                 serializer.Serialize(writer, matrix);
             }
         }

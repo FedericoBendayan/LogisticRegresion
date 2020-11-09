@@ -55,7 +55,7 @@ namespace ConsoleSteps.Tools
             for (int i = 0; i < m; i++)
             {
                 double[] slice = SliceColumn(X, i).ToArray();
-                A[0, i] = Sigmoid((Dot(slice, w) + b)/m);
+                A[0, i] = Sigmoid((Dot(slice, w) + b));
             }
 
             // A to list:[[0.9998766054240137, 0.9999938558253978, 0.004496273160941178]]
@@ -84,9 +84,6 @@ namespace ConsoleSteps.Tools
                 output.Grads.db += yArray[i];
             }
             output.Grads.db = output.Grads.db / m;
-
-
-
 
             return output;
         }
@@ -264,14 +261,14 @@ namespace ConsoleSteps.Tools
         //    1) Calculate the cost and the gradient for the current parameters.Use propagate().
         //    2) Update the parameters using gradient descent rule for w and b.
 
-        public static OptimizeOutput Optimize(double[] w, double b, double[,] X, double[] Y, int num_iterations, double learning_rate, bool print_cost = false)
+        public static ModelOutput Optimize(double[] w, double b, double[,] X, double[,] X_test, double[] Y, double[] Y_test, int num_iterations, double learning_rate, ModelOutput modelOutput, bool print_cost = false)
         {
-            var costList = new List<double>();
-            var optimizeOutput = new OptimizeOutput();
             var propagateOutput = new PropagateOutput();
-            for (int i = 0; i < num_iterations; i++)
+            double[,] Y_prediction_test = null;
+            double[,] Y_prediction_train = null;
+            for (int i = 1; i < num_iterations; i++)
             {
-                 propagateOutput = Propagate(w, b, X, Y);
+                propagateOutput = Propagate(w, b, X, Y);
 
                 //Update weights
                 // w = w -  learning_rate * dw
@@ -280,28 +277,39 @@ namespace ConsoleSteps.Tools
                 //b = b - learning_rate * db
                 b = b - learning_rate * propagateOutput.Grads.db;
 
-                if (i % 100 == 0)
+                if (i % 100 == 0 )
                 {
-                    costList.Add(propagateOutput.Cost);
+                    Y_prediction_test = Predict(w, b, X_test);
+                    Y_prediction_train = Predict(w, b, X);
+
+                    var trainingEvolutionItem = new TrainingEvolutionItem
+                    {
+                        Cost = propagateOutput.Cost,
+                        Iteration = i,
+                        TestAccuracy = 100 - MeanAbsolutePercentage(ToSingle(Y_prediction_test), Y_test),
+                        TrainAccuracy = 100 - MeanAbsolutePercentage(ToSingle(Y_prediction_train), Y)
+                    };
+
+                    modelOutput.TrainingEvolutionItemList.Add(trainingEvolutionItem);
+
                     if (print_cost)
                     {
-                        //var Y_prediction_test = Predict(w, b, X_test);
-                        //var Y_prediction_train = Predict(w, b, X_train);
-                        //var test_accuracy = 100 - MeanAbsolutePercentage(ToSingle(Y_prediction_test), Y_test);
-                        //var train_accuracy = 100 - MeanAbsolutePercentage(ToSingle(Y_prediction_train), Y_train);
-
-                        // Print train/test Errors
-                        //Console.WriteLine($"train accuracy: {train_accuracy} %");
-                        //Console.WriteLine($"test accuracy: {test_accuracy} %");
-                        Console.WriteLine($"Cost after iteration {i}: {propagateOutput.Cost}");
+                        Console.WriteLine($"Cost after iteration {i}: {trainingEvolutionItem.Cost} - train accuracy: {trainingEvolutionItem.TrainAccuracy} %  - test accuracy: {trainingEvolutionItem.TestAccuracy} %");
                     }
                 }
 
             }
-            optimizeOutput.Costs = costList.ToArray();
-            optimizeOutput.Grads = propagateOutput.Grads;
-            optimizeOutput.Params = new Params(w, b);
-            return optimizeOutput;
+            var lastTrainingEvolutionItem = modelOutput.TrainingEvolutionItemList[modelOutput.TrainingEvolutionItemList.Count-1];
+            modelOutput.test_accuracy = lastTrainingEvolutionItem.TestAccuracy;
+            modelOutput.train_accuracy = lastTrainingEvolutionItem.TrainAccuracy;
+
+            modelOutput.Y_prediction_test = Y_prediction_test;
+            modelOutput.Y_prediction_train = Y_prediction_train;
+            modelOutput.w = w;
+            modelOutput.b = b;
+            modelOutput.learning_rate = learning_rate;
+            modelOutput.num_iterations = num_iterations;
+            return modelOutput;
         }
 
         //        '''
@@ -334,7 +342,8 @@ namespace ConsoleSteps.Tools
                 {
                     Y_prediction[0, i] = 1;
                 }
-                else {
+                else
+                {
                     Y_prediction[0, i] = 0;
                 }
             }
@@ -363,47 +372,27 @@ namespace ConsoleSteps.Tools
             double[] Y_train,
             double[,] X_test,
             double[] Y_test,
-            int num_iterations = 16000,
-            double learning_rate = 1.5,
+            int num_iterations = 2000,
+            double learning_rate = 0.5,
             bool print_cost = true)
         {
+            var modelOutput = new ModelOutput();
+
             var w = createWMatrixRandom(64 * 64 * 3);
             double b = 0;
 
-            var optimizeOutput = Optimize(w, b, X_train, Y_train, num_iterations, learning_rate, print_cost);
-
-            w = optimizeOutput.Params.w;
-            b = optimizeOutput.Params.b;
-
-            var Y_prediction_test = Predict(w, b, X_test);
-            var Y_prediction_train = Predict(w, b, X_train);
-
-
-            var modelOutput = new ModelOutput();
-            modelOutput.Cost = optimizeOutput.Costs;
-            modelOutput.Y_prediction_test = Y_prediction_test;
-            modelOutput.Y_prediction_train = Y_prediction_train;
-            modelOutput.w = w;
-            modelOutput.b = b;
-            modelOutput.learning_rate = learning_rate;
-            modelOutput.num_iterations = num_iterations;
-
-            modelOutput.test_accuracy = 100-MeanAbsolutePercentage(ToSingle(Y_prediction_test), Y_test);
-            modelOutput.train_accuracy = 100-MeanAbsolutePercentage(ToSingle(Y_prediction_train), Y_train);
-
-            // Print train/test Errors
-            Console.WriteLine($"train accuracy: {modelOutput.train_accuracy} %");
-            Console.WriteLine($"test accuracy: {modelOutput.test_accuracy} %");
+            modelOutput = Optimize(w, b, X_train, X_test, Y_train, Y_test, num_iterations, learning_rate, modelOutput, print_cost);
 
             return modelOutput;
         }
-        private static double[] createWMatrixRandom(int length) {
+        private static double[] createWMatrixRandom(int length)
+        {
 
             var w = new double[length];
             var rnd = new Random();
             for (int i = 0; i < length; i++)
             {
-                w[i] = rnd.NextDouble() * (2)  - 1;
+                w[i] = rnd.NextDouble() * (20) - 10;
             }
             return w;
         }
@@ -426,40 +415,36 @@ namespace ConsoleSteps.Tools
 
     public class ModelOutput
     {
-        public double[] Cost { get; set; }
-
-        public double[,] Y_prediction_test { get; set; }
-        public double[,] Y_prediction_train { get; set; }
-
-        public double[] w { get; set; }
-        public double b { get; set; }
+        public int num_iterations { get; set; }
         public double learning_rate { get; set; }
         public double train_accuracy { get; set; }
         public double test_accuracy { get; set; }
-        public int num_iterations { get; set; }
+        public double[] w { get; set; }
+        public double b { get; set; }
+        public double[,] Y_prediction_test { get; set; }
+        public double[,] Y_prediction_train { get; set; }
+        public List<TrainingEvolutionItem> TrainingEvolutionItemList { get; set; }
+
+        public ModelOutput()
+        {
+            this.TrainingEvolutionItemList = new List<TrainingEvolutionItem>();
+        }
 
     }
+
+    public class TrainingEvolutionItem
+    {
+
+        public int Iteration { get; set; }
+        public double Cost { get; set; }
+        public double TrainAccuracy { get; set; }
+        public double TestAccuracy { get; set; }
+    }
+
     public class PropagateOutput
     {
         public double Cost { get; set; }
         public Grads Grads { get; set; }
-
-    }
-
-    public class OptimizeOutput
-    {
-        public double[] Costs { get; set; }
-        public Grads Grads { get; set; }
-
-        public Params Params { get; set; }
-
-        public OptimizeOutput()
-        {
-            this.Grads = new Grads();
-            this.Params = new Params();
-            this.Costs = new double[0];
-        }
-
 
     }
 
