@@ -372,7 +372,7 @@ namespace ConsoleSteps.Tools
             double[] Y_train,
             double[,] X_test,
             double[] Y_test,
-            int num_iterations = 2000,
+            int num_iterations = 4000,
             double learning_rate = 0.0063,
             bool print_cost = true)
         {
