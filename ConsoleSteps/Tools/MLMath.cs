@@ -266,7 +266,7 @@ namespace ConsoleSteps.Tools
             var propagateOutput = new PropagateOutput();
             double[,] Y_prediction_test = null;
             double[,] Y_prediction_train = null;
-            for (int i = 1; i < num_iterations; i++)
+            for (int i = 1; i < num_iterations+1; i++)
             {
                 propagateOutput = Propagate(w, b, X, Y);
 
@@ -277,7 +277,7 @@ namespace ConsoleSteps.Tools
                 //b = b - learning_rate * db
                 b = b - learning_rate * propagateOutput.Grads.db;
 
-                if (i % 100 == 0 )
+                if (i % 10 == 0 )
                 {
                     Y_prediction_test = Predict(w, b, X_test);
                     Y_prediction_train = Predict(w, b, X);
@@ -372,8 +372,8 @@ namespace ConsoleSteps.Tools
             double[] Y_train,
             double[,] X_test,
             double[] Y_test,
-            int num_iterations = 2000,
-            double learning_rate = 0.5,
+            int num_iterations = 4000,
+            double learning_rate = 0.005,
             bool print_cost = true)
         {
             var modelOutput = new ModelOutput();
@@ -392,7 +392,7 @@ namespace ConsoleSteps.Tools
             var rnd = new Random();
             for (int i = 0; i < length; i++)
             {
-                w[i] = rnd.NextDouble() * (20) - 10;
+                w[i] = rnd.NextDouble() * (2) - 1;
             }
             return w;
         }
